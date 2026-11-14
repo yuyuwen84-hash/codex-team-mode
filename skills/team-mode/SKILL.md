@@ -26,6 +26,8 @@ When the user asks to simplify code, or before committing a code change, follow 
 
 For each dispatch, name the intended `agent_type`, count, independent scope, expected return, and write ownership. Keep write scopes separate when agents share a workspace.
 
+This fork uses Luna / medium for `Explorer`, Terra / high for `Executor`, and Sol / high for `Reviewer`; fixed profiles use the Magpie catalog's `auto/` model IDs. Terra / high is a starting point for bounded implementation, to be evaluated through acceptance, rework, and total cost. Role responsibilities and write ownership remain the same.
+
 Other configured roles and models are allowed when appropriate. Model and effort defaults, plus the optional `default.toml` sentinel, are described in [profile setup](references/custom-agents.md); normal dispatch does not require reading it.
 
 ## Context and handoff
@@ -38,9 +40,9 @@ Give the child its assigned question or deliverable, relevant context, and scope
 
 ## Expert help
 
-When stronger expertise would help, use `python3 scripts/current_model.py` if the parent model is unclear. Choose an available stronger model and supported effort for the model-free `ExpertAdvisor` profile.
+When expert help would add value, use `python3 scripts/current_model.py` if the parent model is unclear. Keep `ExpertAdvisor` model-free and select an available model and supported effort for the assigned problem. Prefer `auto/gpt-6-astra` for difficult reasoning, architecture decisions, modeling, or repeatedly unresolved problems; `xhigh` is a starting point, not a fixed setting. For expert work dominated by visual reasoning or complex screen automation, consider `auto/gpt-6.1-terra` / `medium`; for engineering-heavy expert work, consider `auto/gpt-6.1-sol` / `high`. Ordinary implementation stays with `Executor`; these choices do not expand expert responsibilities. See [profile setup](references/custom-agents.md) for the selection rationale.
 
-Give it the decision or outcome, relevant context, evidence, constraints, and scope without presenting a proposed cause as fact. The expert may produce a plan or carry out assigned modeling or complex automation. Check its result before accepting it. If no stronger model is available, continue without claiming a stronger-model consultation.
+Give it the decision or outcome, relevant context, evidence, constraints, and scope without presenting a proposed cause as fact. The expert may produce a plan or carry out assigned modeling or complex automation. Check its result before accepting it. If no stronger model is available, continue without claiming a stronger-model consultation. A task-specific choice such as Terra for visual work is not evidence that it is stronger on every task.
 
 A model fixed in a custom profile takes precedence over a spawn-time choice. See [profile setup](references/custom-agents.md) for model changes; do not assume an explicit model overrides `Explorer`, `Executor`, or `Reviewer`.
 

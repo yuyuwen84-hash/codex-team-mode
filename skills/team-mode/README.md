@@ -4,11 +4,13 @@
 
 主 Agent 负责拆解任务并分配具体问题或交付结果；文件提示和故障猜测只是线索，子 Agent 在分配的范围内自行选择做法。
 
+本 Fork 面向 Magpie 模型目录，采用 Explorer / Luna / medium、Executor / Terra / high、Reviewer / Sol / high；ExpertAdvisor 保持模型与档位按次选择，困难问题优先 Astra。Executor 的 high 是待验证起点，以验收、返工与总成本评估。固定角色使用 `auto/` 模型 ID，其他 provider 需按实际目录调整。
+
 四个角色模板位于仓库 [`agents/`](../../agents/)；`default.toml` 是可选的 GPT-6 Luna Low 派发哨兵，不是 Team Mode 的必要条件。安装和模型优先级见[角色配置说明](references/custom-agents.md)。
 
 [Explore](references/explore.md) 按需定位大型代码库中的相关文件和关系；[Simplify](references/simplify.md) 按请求或在提交前检查改动的复杂度并安排复核。两条路径都按独立任务决定子 Agent 数量，主 Agent 负责整合与验收。
 
-提示词统一使用英语。派发默认不继承主对话；Reviewer 和 ExpertAdvisor 必须从空历史上下文开始，Executor 只有确实依赖最近对话中的决定时才继承少量回合。ExpertAdvisor 不固定模型，主 Agent 选择可用的更强模型并核查其方案或执行结果。
+提示词统一使用英语。派发默认不继承主对话；Reviewer 和 ExpertAdvisor 必须从空历史上下文开始，Executor 只有确实依赖最近对话中的决定时才继承少量回合。ExpertAdvisor 不固定模型，主 Agent 按任务主要难点选择模型与档位，困难问题优先 Astra，并核查其方案或执行结果。视觉占主导时可按原专家职责选择 Terra，不将每次换模都称为更强模型咨询。
 
 本地诊断可按需运行 `python3 scripts/current_model.py` 和 `python3 scripts/usage_by_model.py --days 7 --by-agent --json`。完整用法见[项目说明](../../README.md)。
 
