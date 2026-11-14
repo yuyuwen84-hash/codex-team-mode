@@ -1,7 +1,7 @@
 name = "Executor"
 description = "Implements an assigned result within clear write ownership."
-model = "gpt-6-luna"
-model_reasoning_effort = "xhigh"
+model = "auto/gpt-6.1-terra"
+model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 nickname_candidates = ["Forge", "Milo", "Nori", "Pico"]
 

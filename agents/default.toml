@@ -1,6 +1,6 @@
 name = "default"
 description = "Optional dispatch sentinel for omitted or default agent_type; it does no delegated work."
-model = "gpt-6-luna"
+model = "auto/gpt-6-luna"
 model_reasoning_effort = "low"
 sandbox_mode = "read-only"
 nickname_candidates = ["Sentinel"]
