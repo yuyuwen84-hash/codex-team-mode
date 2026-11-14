@@ -6,14 +6,16 @@
 
 Team Mode 是 Codex Skill。主 Agent 负责拆解、未决判断和最终验收；子 Agent 只接手职责明确、确实值得委派的部分。简单任务可以不派任何子 Agent。
 
+本 Fork 按四模型分工适配 Magpie 环境，保留上游四个工作角色及职责。固定角色使用 `auto/` 模型 ID；其他 provider 安装前需核对实际模型目录。Executor 的 Terra / high 是控制日常实施成本的待验证起点；模型选择详见[角色配置说明](./skills/team-mode/references/custom-agents.md)。
+
 ## 角色
 
 | 角色 | 默认配置 | 何时使用 |
 | --- | --- | --- |
 | Explorer | GPT-6 Luna Medium、Fast | 主 Agent 明确需要探索大量代码，先定位主要文件、入口和调用关系。 |
-| Executor | GPT-6 Luna Extra High | 目标和文件归属清楚时，围绕预期结果完成实现。 |
+| Executor | GPT-6.1 Terra High | 目标和文件归属清楚时，围绕预期结果完成实现。 |
 | Reviewer | GPT-6.1 Sol High | 从全新上下文独立检查稳定产物；需要留档时保存 Markdown 审查报告。 |
-| ExpertAdvisor | 模型按次选择 | 为复杂决策制定方案，或在主 Agent 难以胜任时执行建模与复杂计算机自动化；也可处理反复未解决的问题。 |
+| ExpertAdvisor | 模型与档位按次选择，困难问题优先 GPT-6 Astra | 为复杂决策制定方案，或在主 Agent 难以胜任时执行建模与复杂计算机自动化；也可处理反复未解决的问题。 |
 
 Explorer 默认请求 Fast；其他角色沿用主 Agent 的速度档。GPT-6 Fast 可用时，额度消耗为 Standard 的 2.5 倍，实际生效档位以子 Agent 运行记录为准。
 
@@ -33,7 +35,7 @@ Skill 内置 [Explore](./skills/team-mode/references/explore.md) 与 [Simplify](
 ## 安装
 
 ```bash
-npx skills add oil-oil/codex-team-mode
+npx skills add yuyuwen84-hash/codex-team-mode
 ```
 
 Skill 和角色配置分开安装。将 [`agents/`](./agents) 中的 `Explorer.toml`、`Executor.toml`、`Reviewer.toml`、`ExpertAdvisor.toml` 复制到 `~/.codex/agents/`；只给一个项目使用时，复制到该项目的 `.codex/agents/`。角色未立即出现时，新建 Codex 任务或重启。详见[角色配置说明](./skills/team-mode/references/custom-agents.md)。
@@ -44,7 +46,7 @@ Skill 和角色配置分开安装。将 [`agents/`](./agents) 中的 `Explorer.t
 
 ## 诊断
 
-`current_model.py` 按需从本地任务日志读取主 Agent 实际模型；`usage_by_model.py` 统计本地保留会话的模型和用量。日志可能不完整，费用按注明日期的 Standard 费率估算，不能当作账单。
+`current_model.py` 按需从本地任务日志读取主 Agent 实际模型；`usage_by_model.py` 统计本地保留会话的模型和用量。日志可能不完整，费用按注明日期的 Standard 费率估算，不能当作账单。本 Fork 的 `auto/` 模型 ID 和 Terra 尚未纳入原脚本费率表；token 统计仍可用，未知费用不能视为零，也不能据此推算 Magpie 账单。
 
 ```bash
 python3 skills/team-mode/scripts/current_model.py
