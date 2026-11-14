@@ -13,6 +13,14 @@ For local usage, run `python3 scripts/usage_by_model.py --task-id current --by-a
 
 Record whether the fresh brief supplied the goal, source paths, scope, and checks the child needed. Missing evidence is a briefing issue before it is a model issue. Distinguish a completed lifecycle event from an actual final report and from main-agent acceptance. Inspect shared artifacts before retrying a failed or interrupted child.
 
+## Evaluate The Four-Model Adaptation
+
+The profile table in [profile setup](custom-agents.md) is the source for this fork's model defaults. Verify Explorer / Luna / medium, Executor / Terra / high, and Reviewer / Sol / high in actual traces. ExpertAdvisor stays selected per consultation, with Astra preferred for difficult problems; only validate other expert choices when a real assignment calls for them.
+
+For Terra implementation, check the delivered behavior and relevant regression tests, then obtain independent review of the stable result. Compare acceptance, retries, rework, review overhead, wall-clock time, and attributable tokens across representative work. Keep the lightest configuration that meets acceptance; higher effort or a different model requires evidence, not a single routine error. Do not run duplicate work just to fill a model comparison.
+
+The inherited usage script does not price this fork's `auto/` IDs or current Terra model. Preserve token counts, treat unpriced credits as unknown, and do not use official Standard rates as Magpie billing evidence. Use verified provider rates only when computing actual cost.
+
 ## Interpret The Roles
 
 - `Explorer` is useful only when the main agent explicitly needs a large-codebase file map. Measure whether it found the right primary files and reduced parent search.

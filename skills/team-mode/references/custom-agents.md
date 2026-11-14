@@ -8,16 +8,32 @@ Copy the templates from the repository's `agents/` directory into `~/.codex/agen
 
 | Role | Model | Effort | Tier | Purpose |
 | --- | --- | --- | --- | --- |
-| `Explorer` | `gpt-6-luna` | `medium` | `fast` | Locate primary files in a large codebase when the parent requests it. |
-| `Executor` | `gpt-6-luna` | `xhigh` | inherited | Complete a bounded implementation. |
-| `Reviewer` | `gpt-6.1-sol` | `high` | inherited | Review a stable result and save a Markdown report when useful. |
+| `Explorer` | `auto/gpt-6-luna` | `medium` | `fast` | Locate primary files in a large codebase when the parent requests it. |
+| `Executor` | `auto/gpt-6.1-terra` | `high` | inherited | Complete a bounded implementation. |
+| `Reviewer` | `auto/gpt-6.1-sol` | `high` | inherited | Review a stable result and save a Markdown report when useful. |
 | `ExpertAdvisor` | selected per consultation | selected per consultation | inherited | Investigate a complex decision or carry out assigned modeling or automation. |
 
 `ExpertAdvisor.toml` deliberately omits `model` and `model_reasoning_effort`. Choose them at spawn time. Current Codex applies a custom profile's fixed model and effort *after* resolving explicit spawn values, so a fixed profile wins over a conflicting spawn request. Other models and roles may be configured; Team Mode does not impose a global model allowlist. See the [Codex subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents#custom-agents).
 
+## Model Selection In This Fork
+
+These templates target the Magpie catalog with `auto/` IDs. Other providers must use IDs from their own model catalog; the prefix is not a universal OpenAI model name. The parent model remains the user's choice.
+
+Use Luna / medium for bounded code-location work, Terra / high as the initial implementation default, and Sol / high for independent review. The [official model-selection guide](https://developers.openai.com/api/docs/guides/model-selection) includes scoped code fixes among Terra's uses when inputs, requirements, and verification are clear. This fits `Executor`'s existing bounded assignment; it does not restrict that role to visual work. Evaluate acceptance, retries, repair time, review overhead, and total usage before changing its model or effort. One ordinary failure is not enough to upgrade the default.
+
+Keep `ExpertAdvisor` model and effort selected per consultation:
+
+| Main difficulty within the existing expert assignment | Model | Starting effort |
+| --- | --- | --- |
+| Difficult decisions, architecture, modeling, or repeatedly unresolved problems | `auto/gpt-6-astra` | `xhigh` |
+| Visual reasoning or complex screen automation | `auto/gpt-6.1-terra` | `medium` |
+| Engineering-heavy expert modeling or automation | `auto/gpt-6.1-sol` | `high` |
+
+These are starting choices, not a ranking or automatic escalation chain. Ordinary implementation remains with `Executor`; expert consultation must still meet the original dispatch criteria. No model-call benchmark, provider price, or Fast availability is implied by these templates.
+
 ## Optional Default Sentinel
 
-Codex includes a built-in general-purpose `default` agent. The repository also provides an optional `default.toml` sentinel, using `gpt-6-luna` at `low` effort. Installing it under `~/.codex/agents/` overrides the built-in default for **all** local tasks and makes an omitted or `default` dispatch return `DISPATCH BLOCKED`. This catches routing mistakes but still creates a child and consumes usage; it is not a security boundary. Team Mode works without it and still asks the parent to name the intended role explicitly.
+Codex includes a built-in general-purpose `default` agent. The repository also provides an optional `default.toml` sentinel, using `auto/gpt-6-luna` at `low` effort. Installing it under `~/.codex/agents/` overrides the built-in default for **all** local tasks and makes an omitted or `default` dispatch return `DISPATCH BLOCKED`. This catches routing mistakes but still creates a child and consumes usage; it is not a security boundary. Team Mode works without it and still asks the parent to name the intended role explicitly.
 
 To disable an installed personal sentinel without deleting it:
 
